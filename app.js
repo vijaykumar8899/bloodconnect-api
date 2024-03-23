@@ -1,4 +1,8 @@
-require("dotenv").config();
+try {
+  require("dotenv").config();
+} catch (err) {
+  console.error("Error loading .env file:", err);
+}
 const express = require("express");
 const mongoose = require("mongoose");
 const app = express();
@@ -26,14 +30,9 @@ const productData = [];
 const PORT = process.env.PORT || 2000;
 const MONGO_URL = process.env.MONGO_URL;
 
-const accountSid = process.env.accountSid_;
-const authToken = process.env.authToken_;
-const verifySid = process.env.verifySid_;
-const client = require("twilio")(accountSid, authToken);
-
-module.exports = {
-  client,
-};
+console.log(process.env.ACCOUNTSID);
+console.log(process.env.AUTHTOKEN);
+console.log(process.env.VERFIFYSID);
 
 db.once("open", async () => {
   try {
@@ -104,7 +103,11 @@ db.once("open", async () => {
     });
 
     app.post("/api/send-otp/", (req, res) => {
-      const { phoneNumber } = req.body;
+      const { phoneNumber, ACCOUNTSID, AUTHTOKEN, VERFIFYSID } = req.body;
+      const accountSid = ACCOUNTSID;
+      const authToken = AUTHTOKEN;
+      const verifySid = VERFIFYSID;
+      const client = require("twilio")(accountSid, authToken);
       const otp = generateOtp;
       const otpDocument = new OtpModel({ phoneNumber, otp });
       otpDocument.save();
@@ -125,7 +128,12 @@ db.once("open", async () => {
     });
 
     app.post("/api/verify-otp/", async (req, res) => {
-      const { phoneNumber, userOtp } = req.body;
+      const { phoneNumber, userOtp, ACCOUNTSID, AUTHTOKEN, VERFIFYSID } =
+        req.body;
+      const accountSid = ACCOUNTSID;
+      const authToken = AUTHTOKEN;
+      const verifySid = VERFIFYSID;
+      const client = require("twilio")(accountSid, authToken);
       try {
         const otpDocument = await OtpModel.findOne({
           phoneNumber,
