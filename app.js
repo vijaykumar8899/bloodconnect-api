@@ -26,9 +26,9 @@ const productData = [];
 const PORT = process.env.PORT || 2000;
 const MONGO_URL = process.env.MONGO_URL;
 
-const accountSid = "AC2ab19486d688944f8b762e34d6540718";
-const authToken = "23e0541c7701f639e3fcdf7958a5725d";
-const verifySid = "VAf06c30bb30ea8e1ca5378e7f32130e9b";
+const accountSid = process.env.accountSid_;
+const authToken = process.env.authToken_;
+const verifySid = process.env.verifySid_;
 const client = require("twilio")(accountSid, authToken);
 
 module.exports = {
