@@ -29,25 +29,26 @@ exports.register = async (req, res, next) => {
 
 exports.login = async (req, res, next) => {
   try {
-    const { email, password, otp } = req.body;
-    const user = await UserService.UserCheck(email);
+    const { phoneNumber } = req.body;
+    const user = await UserService.UserCheck(phoneNumber);
+
+    const token = "";
 
     if (!user) {
       // throw new Error("User not exist!");
-      // console.log("new user");
-      // const otp = UserService.generateOtp();
-      // res.status(200).json({ status: true, otp: otp });
+      console.log("new user");
+      res.status(200).json({ status: false, token: token });
     }
 
-    const isMatch = await user.comparePassword(password);
-    if (isMatch === false) {
-      throw new Error("wrong password!");
-    }
+    // const isMatch = await user.comparePassword(password);
+    // if (isMatch === false) {
+    //   throw new Error("wrong password!");
+    // }
 
-    let tokenData = { _id: user._id, email: user.email };
+    // let tokenData = { _id: user._id, email: user.email };
+    // token = await UserService.generateToken(tokenData, "secretKey", "1h");
 
-    const token = await UserService.generateToken(tokenData, "secretKey", "1h");
-    res.status(200).json({ status: true, token: token });
+    res.status(200).json({ status: true, token: token, userData: user });
   } catch (e) {
     throw e;
   }
