@@ -144,13 +144,9 @@ db.once("open", async () => {
           .services(verifySid)
           .verificationChecks.create({ to: phoneNumber, code: userOtp })
           .then((verification_check) => console.log(verification_check.status))
-          .then(() => console.log("success login"));
+          .then(() => res.send({ success: true }));
 
-        if (otpDocument) {
-          res.send({ success: true });
-        } else {
-          res.status(401).send({ success: false, error: "Invalid otp" });
-        }
+        res.status(401).send({ success: false, error: "Invalid otp" });
       } catch (e) {
         console.error(e);
       }
